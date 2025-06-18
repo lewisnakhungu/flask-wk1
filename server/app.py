@@ -1,7 +1,9 @@
 from flask import Flask
-from models import db, migrate  # Now safe to import
-from models import Hero, Power, HeroPower  # models need to be loaded
-from routes import register_routes  # import routes after app is created
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+
+from models import db, Hero, Power, HeroPower 
+from routes import register_routes
 
 def create_app():
     app = Flask(__name__)
@@ -10,9 +12,9 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
     db.init_app(app)
-    migrate.init_app(app, db)
+    migrate = Migrate(app, db)  
 
-    register_routes(app)
+    register_routes(app)  # register routes after app/db are set
 
     return app
 
